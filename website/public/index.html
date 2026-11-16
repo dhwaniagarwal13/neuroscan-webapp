@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuroScan: brain tumor MRI classification, explained</title>
+<meta name="description" content="A student research project that sorts brain MRI slices into glioma, meningioma, pituitary macroadenoma or healthy, with a plain-language guide to tumors, MRI and the AI behind it.">
+<meta name="theme-color" content="#0c1315">
+<link rel="icon" href="static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="page-index">
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="index.html" aria-label="NeuroScan home">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 17c3-1 4-5 7-5s3 4 6 4 4-5 9-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="21" cy="21" r="3" fill="var(--amber)"/></svg>
+      <span>NeuroScan</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav" aria-label="Main">
+      <a href="tumors.html">Tumor types</a>
+      <a href="mri.html">MRI basics</a>
+      <a href="technology.html">How the AI works</a>
+      <a href="results.html">Results</a>
+      <a href="data.html">Data</a>
+      <a href="faq.html">FAQ</a>
+      <a href="resources.html">Resources</a>
+      <a class="try" href="demo.html">Try the classifier</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<section class="stage">
+  <div class="stage-in">
+    <div>
+      <h1>Teach a network to sort brain MRI, then see where it goes wrong.</h1>
+      <p class="lede">NeuroScan is a student project that classifies a brain MRI slice as glioma, meningioma, pituitary macroadenoma or healthy. This site explains the tumors, the scans and the AI, and reports the results honestly, including the mistakes.</p>
+      <div class="btn-row">
+        <a class="btn" href="demo.html">Try the classifier</a>
+        <a class="btn btn-line" href="tumors.html">Learn about tumor types</a>
+      </div>
+    </div>
+    <div class="viewer">
+      <div class="viewer-screen">
+        <canvas id="slice" data-mode="flair" aria-label="Synthetic brain MRI slice with a lesion, generated in your browser"></canvas>
+        <div class="ov tl">SYNTHETIC<br>AXIAL<br><span id="ov-seq">T2 FLAIR</span></div>
+        <div class="ov tr"><span id="ov-slice">Slice 15 / 28</span></div>
+        <div class="ov bl">Illustration, not a patient scan</div>
+      </div>
+      <div class="viewer-ctl">
+        <label for="slice-range"><span>Scrub through the slices</span></label>
+        <input id="slice-range" type="range" min="0" max="27" value="14">
+        <p class="viewer-note" id="viewer-note" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Start where your questions are</h2>
+      <p class="lede">Six short guides, written for people who are not radiologists or machine learning engineers.</p>
+    </div>
+    <div class="rows">
+      <a class="row" href="tumors.html"><h3>Tumor types</h3><p>Glioma, meningioma and pituitary macroadenoma: where they start, how they look, how they are treated.</p><span class="go">Read the guide</span></a>
+      <a class="row" href="mri.html"><h3>MRI basics</h3><p>What T1, T2 and FLAIR mean, and why the same brain looks different in each. Includes a sequence switcher.</p><span class="go">Explore MRI</span></a>
+      <a class="row" href="technology.html"><h3>How the AI works</h3><p>Convolutions, transfer learning and what a confidence score does and does not tell you.</p><span class="go">See the model</span></a>
+      <a class="row" href="results.html"><h3>Results</h3><p>Measured accuracy on images the model never saw, the confusion matrix, and a mistake we caught in our own validation.</p><span class="go">Check the numbers</span></a>
+      <a class="row" href="data.html"><h3>Data</h3><p>Where the 1,137 images come from, how they were split, and what the dataset cannot tell us.</p><span class="go">Inspect the data</span></a>
+      <a class="row" href="faq.html"><h3>FAQ and glossary</h3><p>Can AI diagnose a tumor? Is my scan uploaded anywhere? Plain answers and a glossary of imaging terms.</p><span class="go">Get answers</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Four categories, one image at a time</h2>
+      <p class="lede">The classifier looks at a single 2D slice and returns a probability for each category.</p>
+    </div>
+    <div class="cats">
+      <div class="cat"><h3>Glioma</h3><span class="tag">arises from glial cells</span><p>Infiltrative tumors of the brain's supporting tissue, from slow-growing to highly aggressive.</p></div>
+      <div class="cat"><h3>Meningioma</h3><span class="tag">arises from the meninges</span><p>Usually slow-growing tumors attached to the membranes around the brain.</p></div>
+      <div class="cat"><h3>Pituitary macroadenoma</h3><span class="tag">arises from the pituitary gland</span><p>Tumors larger than 10 mm at the base of the brain, often pressing on nearby structures.</p></div>
+      <div class="cat"><h3>Healthy</h3><span class="tag">no visible tumor</span><p>Normal slices, included so the model also learns what a normal brain looks like.</p></div>
+    </div>
+    <p class="muted" style="margin-top:1.2rem"><a href="tumors.html">Read the full tumor guide</a></p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How well does it work?</h2>
+      <p class="lede">Measured on 229 images held out from training, for the model currently served by the demo.</p>
+    </div>
+    <div id="kpis" class="kpis"></div>
+    <p id="analytics-error" class="error" hidden>The live numbers could not be loaded. The results page has the full write-up.</p>
+    <p class="muted prose">The dataset is small and the validation split is by slice, not by patient, so the test-set figures above are the ones to trust. <a href="results.html">See the full results</a>.</p>
+  </div>
+</section>
+
+<section class="band band-tight">
+  <div class="wrap">
+    <div class="callout">
+      <h3>Research project, not medical advice</h3>
+      <p>NeuroScan cannot diagnose, treat or rule out any condition. A brain MRI needs review by a qualified radiologist or physician. If you are worried about symptoms, see a doctor.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="foot">
+  <div class="foot-in">
+    <div class="foot-about">
+      <p class="foot-brand">NeuroScan</p>
+      <p>A student research project on classifying brain MRI slices. It is not a medical device and cannot diagnose, treat or rule out any condition. Anyone worried about symptoms or a scan should talk to a doctor.</p>
+    </div>
+    <div>
+      <p class="foot-head">Learn</p>
+      <ul>
+        <li><a href="tumors.html">Tumor types</a></li>
+        <li><a href="mri.html">MRI basics</a></li>
+        <li><a href="faq.html">FAQ and glossary</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="foot-head">The project</p>
+      <ul>
+        <li><a href="technology.html">How the AI works</a></li>
+        <li><a href="results.html">Results</a></li>
+        <li><a href="data.html">Data</a></li>
+        <li><a href="resources.html">Resources and about</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="foot-legal">Built with TensorFlow, Keras, ONNX Runtime Web and Flask. Dataset: Jamil and Khan (2025), Mendeley Data, doi:10.17632/82mtzd8x72.2, CC BY 4.0. Images on this site labelled synthetic are generated in your browser and are not patient scans.</p>
+</footer>
+<script src="static/common.js"></script>
+<script src="static/viewer.js"></script>
+<script src="static/app.js"></script>
+</body>
+</html>

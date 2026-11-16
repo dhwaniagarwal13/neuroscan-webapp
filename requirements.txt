@@ -1,4 +1,13 @@
+# Core (training, evaluation, local web app)
 tensorflow>=2.16
 numpy
 pillow
+scikit-learn
+matplotlib
+seaborn
 flask
+
+# Optional: export the model to ONNX for the website demo (src/export_onnx.py)
+# tf2onnx
+# onnx
+# onnxruntime
