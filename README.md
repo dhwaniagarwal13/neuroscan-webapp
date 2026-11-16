@@ -1,6 +1,7 @@
 # NeuroScan: Brain Tumor Detection from MRI Scans
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/dhwaniagarwal13/neuroscan-webapp/blob/main/Brain_Tumor_Detection_Colab.ipynb)
+&nbsp; **Live web app (Flask on Vercel):** https://neuroscan-app-beta.vercel.app
 &nbsp; **Live demo (runs the model in your browser):** https://neuroscan-brain-tumor.vercel.app/demo.html
 
 A deep learning model that classifies a brain MRI slice into one of four categories: **Glioma, Meningioma, Pituitary Macroadenoma, or Healthy**. Built with transfer learning (MobileNetV2), evaluated on a held-out test set, and delivered as a Colab notebook, a website whose demo runs the model **in the browser** (ONNX Runtime Web, no server), and a local Flask app.
@@ -90,6 +91,17 @@ python src/export_onnx.py  # rebuilds website/public/model/neuroscan.onnx (needs
 python website/src/build.py
 cd presentation/build && npm install && node build_deck.js
 ```
+
+## Deploy the Flask app to Vercel
+
+`webapp/` deploys as it is. TensorFlow is too large for Vercel's functions, so when it is not installed the app runs `webapp/model/neuroscan.onnx` with ONNX Runtime instead (same predictions as the Keras model). `GET /healthz` reports which backend is active.
+
+```bash
+cd webapp
+vercel deploy --prod
+```
+
+The web app has a landing page and separate pages: `/` (home), `/scan`, `/analytics`, `/classes` and `/model`. Vercel limits request bodies to 4.5 MB, so very large uploads fail there; the local app accepts up to 8 MB.
 
 ## Dataset
 
