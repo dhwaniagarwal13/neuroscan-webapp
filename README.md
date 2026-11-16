@@ -61,8 +61,7 @@ Most errors are glioma / meningioma confusions. Validation accuracy during train
 │   ├── src/                            Page sources and build.py
 │   └── public/                         Built static site + model/neuroscan.onnx (deployed on Vercel)
 ├── presentation/                       Poster (PDF, PNG) and final presentation (PPTX), with build scripts
-├── package.json, scripts/              Node tooling that vendors Bootstrap and fonts into webapp/static/vendor
-└── vercel.json                         Vercel config for the static website
+└── package.json, scripts/              Node tooling that vendors Bootstrap and fonts into webapp/static/vendor
 ```
 
 ## Run it
