@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Classes - NeuroScan{% endblock %}
+{% block description %}The four categories NeuroScan recognizes: glioma, meningioma, pituitary macroadenoma and healthy brain tissue.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="shell">
+    <h1>What it recognizes</h1>
+    <p class="lead">Every scan is sorted into one of four classes. Three are tumor types, and one is healthy tissue.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="shell">
+    <div class="row row-cols-1 row-cols-md-2 gx-5 gy-4">
+      <div class="col"><article class="def"><h3>Glioma</h3><p>Tumors that arise from glial cells in the brain or spinal cord. Often infiltrative with irregular borders.</p></article></div>
+      <div class="col"><article class="def"><h3>Meningioma</h3><p>Usually slow-growing tumors of the meninges, the membranes around the brain. Typically well-defined and attached to the dura.</p></article></div>
+      <div class="col"><article class="def"><h3>Pituitary Macroadenoma</h3><p>Tumors of the pituitary gland larger than 10 mm, located at the base of the brain near the sella turcica.</p></article></div>
+      <div class="col"><article class="def"><h3>Healthy</h3><p>MRI slices with no visible tumor, used so the model also learns what normal anatomy looks like.</p></article></div>
+    </div>
+
+    <div class="next-step">
+      <p>Most mistakes are glioma and meningioma mix-ups. Check the confusion matrix, or load a sample of each class in the scanner.</p>
+      <a class="btn btn-ghost" href="{{ url_for('analytics_page') }}">See the confusion matrix</a>
+      <a class="btn" href="{{ url_for('scan_page') }}">Open the scanner</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

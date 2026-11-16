@@ -1,0 +1,6 @@
+# Lean dependencies for serverless hosting (Vercel). TensorFlow is optional locally; without it the
+# app runs model/neuroscan.onnx with ONNX Runtime. See ../requirements.txt for the full project.
+flask
+numpy
+pillow
+onnxruntime

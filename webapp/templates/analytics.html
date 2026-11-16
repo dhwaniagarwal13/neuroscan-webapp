@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Analytics - NeuroScan{% endblock %}
+{% block description %}How accurate NeuroScan is: test accuracy, per-class precision and recall, confusion matrix and training curves on 229 unseen MRI scans.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="shell">
+    <h1>Model analytics</h1>
+    <p class="lead">Measured on the 229 held-out test images the model never saw during training.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="shell">
+    <div id="kpis" class="kpis"></div>
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <h3>Per-class performance</h3>
+          <div id="perclass"></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card film h-100">
+          <h3>Confusion matrix</h3>
+          <p class="muted small">Rows are the true class, columns the predicted class.</p>
+          <div id="matrix" class="matrix"></div>
+        </div>
+      </div>
+    </div>
+    <div id="history" class="row g-3" hidden>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <h3>Training loss</h3>
+          <div id="chart-loss" class="chart"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <h3>Training accuracy</h3>
+          <div id="chart-acc" class="chart"></div>
+        </div>
+      </div>
+    </div>
+    <p id="history-note" class="muted small" hidden></p>
+    <p id="analytics-error" class="error" hidden>Analytics are unavailable right now. Check that static/metrics.json exists and reload the page.</p>
+
+    <div class="next-step">
+      <p>See these numbers in action on a real scan.</p>
+      <a class="btn btn-ghost" href="{{ url_for('scan_page') }}">Open the scanner</a>
+      <a class="btn btn-ghost" href="{{ url_for('model_page') }}">How the model was built</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='analytics.js') }}"></script>
+{% endblock %}

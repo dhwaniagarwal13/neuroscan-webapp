@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>{% block title %}NeuroScan - Brain Tumor MRI Classifier{% endblock %}</title>
+<meta name="description" content="{% block description %}Upload a brain MRI and get an instant four-class prediction (glioma, meningioma, pituitary macroadenoma, healthy) from a fine-tuned MobileNetV2 network.{% endblock %}">
+<script>
+  // Follow the OS colour scheme and keep Bootstrap's theme in sync when it changes.
+  (function () {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    function apply() { document.documentElement.setAttribute("data-bs-theme", mq.matches ? "dark" : "light"); }
+    apply();
+    if (mq.addEventListener) mq.addEventListener("change", apply); else mq.addListener(apply);
+  })();
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% set ep = request.endpoint %}
+{% set pages = [
+  ('scan_page', 'Scanner'),
+  ('analytics_page', 'Analytics'),
+  ('classes_page', 'Classes'),
+  ('model_page', 'Model'),
+] %}
+
+<a class="skip-link" href="#content">Skip to content</a>
+
+<nav class="navbar navbar-expand-md sticky-top site-nav" aria-label="Main">
+  <div class="container-fluid shell">
+    <a class="navbar-brand brand" href="{{ url_for('index') }}"{% if ep == 'index' %} aria-current="page"{% endif %}><span class="mark" aria-hidden="true"></span>NeuroScan</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
+        <li class="nav-item"><a class="nav-link{% if ep == 'index' %} active{% endif %}" href="{{ url_for('index') }}"{% if ep == 'index' %} aria-current="page"{% endif %}>Home</a></li>
+        {% for endpoint, label in pages %}
+        <li class="nav-item"><a class="nav-link{% if ep == endpoint %} active{% endif %}" href="{{ url_for(endpoint) }}"{% if ep == endpoint %} aria-current="page"{% endif %}>{{ label }}</a></li>
+        {% endfor %}
+        <li class="nav-item"><a href="{{ url_for('scan_page') }}" class="btn btn-small my-2 my-md-0">Try it</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main id="content">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="row g-4">
+      <div class="col-md-7">
+        <p class="footer-brand"><span class="mark" aria-hidden="true"></span>NeuroScan</p>
+        <p>A MobileNetV2 brain MRI classifier built with TensorFlow, Keras, Flask and Bootstrap. For research and education only, not a medical device.</p>
+        <p>Dataset: Jamil and Khan (2025), Mendeley Data, doi:10.17632/82mtzd8x72.2. Sample scans come from the dataset's test split.</p>
+      </div>
+      <div class="col-md-5">
+        <ul class="footer-links list-unstyled">
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('scan_page') }}">Scanner</a></li>
+          <li><a href="{{ url_for('analytics_page') }}">Analytics</a></li>
+          <li><a href="{{ url_for('classes_page') }}">Classes</a></li>
+          <li><a href="{{ url_for('model_page') }}">Model and data</a></li>
+          <li><a href="https://github.com/dhwaniagarwal13/neuroscan-webapp" rel="noopener">Source on GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

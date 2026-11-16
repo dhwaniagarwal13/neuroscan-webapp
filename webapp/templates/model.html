@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Model and data - NeuroScan{% endblock %}
+{% block description %}How NeuroScan was built: a MobileNetV2 transfer-learning model trained in two phases on the Multi-Class Brain Tumor MRI Dataset.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="shell">
+    <h1>Model and data</h1>
+    <p class="lead">A pretrained MobileNetV2 fine-tuned on 908 labeled MRI slices, then tested on 229 it had never seen.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="shell">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card h-100">
+          <h3>Architecture</h3>
+          <ul class="facts">
+            <li>MobileNetV2 base pretrained on ImageNet, input 224 x 224 x 3</li>
+            <li>Rescaling is part of the model, so the app sends raw pixels</li>
+            <li>Global average pooling, Dropout 0.35, softmax over 4 classes</li>
+            <li>Phase 1: train the head with the base frozen, Adam 1e-3</li>
+            <li>Phase 2: unfreeze the top of the base, Adam 1e-4, early stopping on validation loss</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <h3>Dataset</h3>
+          <ul class="facts">
+            <li>Multi-Class Brain Tumor MRI Dataset, Mendeley Data (CC BY 4.0)</li>
+            <li>1,137 images: 908 training, 229 testing, stratified 80/20</li>
+            <li>15% of training held out for validation</li>
+            <li>Augmentation: horizontal flip, rotation, zoom, brightness and contrast</li>
+            <li>Evaluated with classification report, confusion matrix and per-class ROC/AUC</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="alert alert-warning disclaimer-alert" role="note">NeuroScan is a student research project. It is not a medical device and must not be used to diagnose, treat or rule out any condition. Any MRI finding needs review by a qualified radiologist or physician.</p>
+
+    <div class="next-step">
+      <p>The training code, notebook and dataset are all in the project repository.</p>
+      <a class="btn btn-ghost" href="https://github.com/dhwaniagarwal13/neuroscan-webapp" rel="noopener">View the source on GitHub</a>
+      <a class="btn" href="{{ url_for('scan_page') }}">Open the scanner</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

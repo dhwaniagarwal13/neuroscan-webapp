@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Scanner - NeuroScan{% endblock %}
+{% block description %}Upload a brain MRI slice, or load a sample scan, and see the model's four-class prediction with a probability for every class.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="shell">
+    <h1>Analyze a scan</h1>
+    <p class="lead">Drop an MRI slice into the viewer, or load a sample from the test set. The image is analyzed in memory and is not saved.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="shell">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-5">
+        <div class="samples" role="group" aria-labelledby="samples-label">
+          <p id="samples-label" class="samples-label">No scan handy? Try one from the test set.</p>
+          <div class="sample-row">
+            <button type="button" class="sample" data-src="{{ url_for('static', filename='samples/glioma.jpg') }}" data-name="glioma.jpg"><img src="{{ url_for('static', filename='samples/glioma.jpg') }}" alt=""><span>Glioma</span></button>
+            <button type="button" class="sample" data-src="{{ url_for('static', filename='samples/meningioma.jpg') }}" data-name="meningioma.jpg"><img src="{{ url_for('static', filename='samples/meningioma.jpg') }}" alt=""><span>Meningioma</span></button>
+            <button type="button" class="sample" data-src="{{ url_for('static', filename='samples/pituitary.jpg') }}" data-name="pituitary.jpg"><img src="{{ url_for('static', filename='samples/pituitary.jpg') }}" alt=""><span>Pituitary</span></button>
+            <button type="button" class="sample" data-src="{{ url_for('static', filename='samples/healthy.jpg') }}" data-name="healthy.jpg"><img src="{{ url_for('static', filename='samples/healthy.jpg') }}" alt=""><span>Healthy</span></button>
+          </div>
+        </div>
+
+        <ul class="facts scan-tips">
+          <li>Use a single brain MRI slice as a JPG or PNG, up to 8 MB.</li>
+          <li>The model was trained on four classes only. Anything else still gets a prediction, so read the confidence.</li>
+          <li>Low confidence means the model is unsure. Treat those results with extra caution.</li>
+        </ul>
+        <p class="hero-fact">For research and education only, not a medical device. See <a class="text-link" href="{{ url_for('model_page') }}">how the model was built</a> and <a class="text-link" href="{{ url_for('analytics_page') }}">how accurate it is</a>.</p>
+      </div>
+
+      <div class="col-lg-7" id="scan">
+        <div class="viewer" id="viewer" data-state="idle">
+          <label id="drop" class="drop" for="file" tabindex="0">
+            <input id="file" type="file" accept="image/*" hidden>
+            <img id="preview" alt="Uploaded MRI preview" hidden>
+            <div id="drop-hint" class="drop-hint">
+              <svg class="reticle" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="20"></circle>
+                <circle cx="32" cy="32" r="3"></circle>
+                <path d="M32 4v14M32 46v14M4 32h14M46 32h14"></path>
+              </svg>
+              <strong>Drop an MRI here</strong>
+              <span>or click to choose. JPG or PNG, up to 8 MB.</span>
+            </div>
+            <span class="scanline" aria-hidden="true"></span>
+            <span class="cn tl" aria-hidden="true"></span><span class="cn tr" aria-hidden="true"></span>
+            <span class="cn bl" aria-hidden="true"></span><span class="cn br" aria-hidden="true"></span>
+            <span class="ov ov-tl" aria-hidden="true">NeuroScan<br>Axial slice</span>
+            <span class="ov ov-tr" aria-hidden="true">MobileNetV2<br>224 x 224 px</span>
+            <span class="ov ov-bl" aria-hidden="true" id="ov-file">No scan loaded</span>
+            <span class="ov ov-br" id="ov-status" role="status">Waiting for a scan</span>
+          </label>
+        </div>
+        <button id="run" class="btn w-100 run" disabled>Analyze image</button>
+        <div id="result" class="result" aria-live="polite">
+          <p class="muted result-placeholder">Your result appears here: the predicted class and a probability for every class.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='scan.js') }}"></script>
+{% endblock %}
