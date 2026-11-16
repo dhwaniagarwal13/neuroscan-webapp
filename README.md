@@ -101,6 +101,8 @@ cd webapp
 vercel deploy --prod
 ```
 
+The Vercel project is connected to this repository (root directory `webapp`), so every push to `main` deploys automatically.
+
 The web app has a landing page and separate pages: `/` (home), `/scan`, `/analytics`, `/classes` and `/model`. Vercel limits request bodies to 4.5 MB, so very large uploads fail there; the local app accepts up to 8 MB.
 
 ## Dataset
